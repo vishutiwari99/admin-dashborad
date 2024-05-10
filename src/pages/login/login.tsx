@@ -12,8 +12,10 @@ import {
 } from "antd";
 import Logo from "../../components/icons/Logo";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { login, self } from "../../http/api";
+import { login, logout, self } from "../../http/api";
 import { Credentials } from "../../types";
+import { useAuthStore } from "../../store";
+import { usePermission } from "../../hooks/usePermission";
 const loginUser = async (userData: Credentials) => {
   const { data } = await login(userData);
   return data;
@@ -23,7 +25,9 @@ const getSelf = async () => {
   return data;
 };
 const LoginPage = () => {
-  const { data: selfData, refetch } = useQuery({
+  const { setUser, logout: logoutFromStore } = useAuthStore();
+  const { isAllowed } = usePermission();
+  const { refetch } = useQuery({
     queryKey: ["self"],
     queryFn: getSelf,
     enabled: false,
@@ -32,9 +36,14 @@ const LoginPage = () => {
     mutationKey: ["login"],
     mutationFn: loginUser,
     onSuccess: async () => {
-      refetch();
-      console.log("self data", selfData);
-      console.log("login successful");
+      const selfDataPromise = await refetch();
+      setUser(selfDataPromise.data);
+
+      if (!isAllowed(selfDataPromise.data)) {
+        await logout();
+        logoutFromStore();
+        return;
+      }
     },
   });
 
