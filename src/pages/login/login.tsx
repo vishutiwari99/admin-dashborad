@@ -47,11 +47,11 @@ const LoginPage = () => {
       const selfDataPromise = await refetch();
       setUser(selfDataPromise.data);
 
-      if (!isAllowed(selfDataPromise.data)) {
-        // await logout();
-        logoutMutate();
-        return;
-      }
+      // if (!isAllowed(selfDataPromise.data)) {
+      //   // await logout();
+      //   logoutMutate();
+      //   return;
+      // }
     },
   });
 
