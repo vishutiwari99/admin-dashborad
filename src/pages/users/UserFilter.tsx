@@ -1,8 +1,12 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Row, Select, Space } from "antd";
+import { Card, Col, Row, Select, Space } from "antd";
 import Search from "antd/es/input/Search";
 
-const UserFilter = () => {
+type UserFilterProps = {
+  children?: React.ReactNode;
+  onFilterChange: (filterName: string, filterValue: string) => void;
+};
+
+const UserFilter = ({ onFilterChange, children }: UserFilterProps) => {
   return (
     <Card style={{ width: "100%" }}>
       <Row>
@@ -18,7 +22,7 @@ const UserFilter = () => {
               showSearch
               placeholder="status"
               optionFilterProp="children"
-              onChange={() => console.log("skhs")}
+              onChange={(selected) => onFilterChange("statusFilter", selected)}
               onSearch={() => console.log("skhs")}
               // filterOption={() => console.log("skhs")}
               options={[
@@ -41,7 +45,7 @@ const UserFilter = () => {
               showSearch
               placeholder="Select role"
               optionFilterProp="children"
-              onChange={() => console.log("skhs")}
+              onChange={(selected) => onFilterChange("roleFilter", selected)}
               onSearch={() => console.log("skhs")}
               // filterOption={() => console.log("skhs")}
               options={[
@@ -61,11 +65,7 @@ const UserFilter = () => {
             />
           </Space>
         </Col>
-        <Col span={6}>
-          <Button type="primary" icon={<PlusOutlined />}>
-            Add Users
-          </Button>
-        </Col>
+        <Col span={6}>{children}</Col>
       </Row>
     </Card>
   );
