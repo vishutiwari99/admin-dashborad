@@ -5,6 +5,7 @@ import { Link, Navigate } from "react-router-dom";
 import { getUsers } from "../../http/api";
 import { User } from "../../types";
 import { useAuthStore } from "../../store";
+import UserFilter from "./UserFilter";
 
 const Users = () => {
   const {
@@ -69,6 +70,7 @@ const Users = () => {
         />
         {isLoading && <div>Loading...</div>}
         {isError && <div>{error?.message}</div>}
+        <UserFilter />
         <Table dataSource={users} columns={columns} />;
       </Space>
     </>
