@@ -1,10 +1,10 @@
 import { RightOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Breadcrumb, Space, Table } from "antd";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { getUsers } from "../../http/api";
 import { User } from "../../types";
-import { render } from "@testing-library/react";
+import { useAuthStore } from "../../store";
 
 const Users = () => {
   const {
@@ -52,6 +52,11 @@ const Users = () => {
       key: "role",
     },
   ];
+
+  const { user } = useAuthStore();
+  if (user?.role !== "admin") {
+    return <Navigate to="/auth/login" replace={true} />;
+  }
   return (
     <>
       <Space direction="vertical" size={"large"} style={{ width: "100%" }}>
